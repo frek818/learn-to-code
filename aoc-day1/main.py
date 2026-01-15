@@ -23,13 +23,30 @@ class Lock():
         return self.position
 
     
-
-
 def read_combos(filename: str) -> list:
     # read the file and parse into lines into combo
     
+    # 0. Initialize a list to store the Code 
     combos = list()
-    # Make it do it thing
+    
+    # 1. Read the file content into a variable
+    with open(filename) as f:
+        content = f.read()
+
+    # 2. Split to content into a `list` of string
+    lines = content.split("\n")
+
+    # 3. Convert each string into `Code` and add it the list of combos
+    for line in lines:
+        if line == "":
+            continue
+
+        direction = line[0]
+        distance = line[1:]
+
+        code = Code(direction, distance)
+        combos.append(code)
+
     return combos
 
 def main():
@@ -37,7 +54,8 @@ def main():
     landed_on_zero = 0
 
     # 1. read the input combination
-    combos = read_combos("problems.txt")
+    combos = read_combos("problem.txt")
+    print(combos)
 
     # 2. Get the lock
     lock = Lock(start=50)
