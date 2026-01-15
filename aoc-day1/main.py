@@ -1,10 +1,13 @@
-class Code():
-    def __init__(self, direction: str, distance: int):
-        self.direction = direction
-        self.distance = distance
+from dataclasses import dataclass
 
 
-class Lock():
+@dataclass
+class Combo:
+    direction: str
+    distance: int
+
+
+class Lock:
     def __init__(self, start: int, start_range: int = 0, end_range: int = 99):
         self.position = start
         self.start_range = start_range
@@ -14,7 +17,7 @@ class Lock():
         # Move the dial on point to left of the right
         pass
 
-    def enter_code(self, code: Code):
+    def enter_code(self, code: Combo):
         # Enter the code into the lock using the _click method
         pass
 
@@ -22,13 +25,13 @@ class Lock():
         # gets the current value of the lock
         return self.position
 
-    
-def read_combos(filename: str) -> list:
+
+def read_combos(filename: str) -> list[Combo]:
     # read the file and parse into lines into combo
-    
-    # 0. Initialize a list to store the Code 
+
+    # 0. Initialize a list to store the Code
     combos = list()
-    
+
     # 1. Read the file content into a variable
     with open(filename) as f:
         content = f.read()
@@ -38,16 +41,18 @@ def read_combos(filename: str) -> list:
 
     # 3. Convert each string into `Code` and add it the list of combos
     for line in lines:
-        if line == "":
+        line = line.strip()
+        if not line:
             continue
 
         direction = line[0]
-        distance = line[1:]
+        distance = int(line[1:])
 
-        code = Code(direction, distance)
+        code = Combo(direction, distance)
         combos.append(code)
 
     return combos
+
 
 def main():
     # 0. Create zero tracker variable
@@ -73,6 +78,6 @@ def main():
     print("The answers is: ", landed_on_zero)
 
 
-
 if __name__ == "__main__":
     main()
+
