@@ -8,18 +8,32 @@ class Combo:
 
 
 class Lock:
-    def __init__(self, start: int, start_range: int = 0, end_range: int = 99):
+    def __init__(self, start, start_range=0, end_range=99):
         self.position = start
         self.start_range = start_range
         self.end_range = end_range
 
     def _click(self, direction):
         # Move the dial on point to left of the right
-        pass
 
-    def enter_code(self, code: Combo):
+        # calculate new value while accounting for roll over
+        new_value = None
+        if direction == "L":
+            new_value = self.position - 1
+            if new_value < self.start_range:
+                new_value = self.end_range
+        else:
+            new_value = self.position + 1
+            if new_value > self.end_range:
+                new_value = 0
+
+        # set new position
+        self.position = new_value
+
+    def enter_code(self, combo: Combo):
         # Enter the code into the lock using the _click method
-        pass
+        for _ in range(combo.distance):
+            self._click(combo.direction)
 
     def get_current_value(self) -> int:
         # gets the current value of the lock
@@ -60,7 +74,6 @@ def main():
 
     # 1. read the input combination
     combos = read_combos("problem.txt")
-    print(combos)
 
     # 2. Get the lock
     lock = Lock(start=50)
@@ -80,4 +93,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
